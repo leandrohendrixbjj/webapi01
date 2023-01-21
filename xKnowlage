@@ -1,0 +1,10 @@
+Para gerar essa estrutura execute:
+
+1-> -e --git {nomeProjeto}
+2-> Acessar a pasta do projeto
+3-> npm install
+
+npm i uuid => Gera os universal ids
+
+node => Se digitado no terminal, vc pode invocar arquivos do projeto
+e executa-los
