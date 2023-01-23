@@ -1,9 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const db = require('../db.js');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/', (req, res, next) => {
+  res.json(db.all())
+});
+
+router.post('/', (req, res, next) => {
+  const user = db.store(req.body)
+  res.status(201).json({ user });
 });
 
 module.exports = router;

@@ -13,6 +13,7 @@ function all() {
 function store(user) {
     user.id = v4(); //v4 versão da uuid
     global.users.push(user);
+    return user;
 }
 
 function update(id, user) {

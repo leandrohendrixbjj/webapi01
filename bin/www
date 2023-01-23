@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-
+console.clear();
 var app = require('../app');
 var debug = require('debug')('webapi01:server');
 var http = require('http');
