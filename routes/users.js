@@ -38,6 +38,7 @@ router.put('/:id', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
+
     const dataExists = await db.findOne(id);
     if (!dataExists)
       throw new Error("User is not avail")
