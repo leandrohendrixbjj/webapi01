@@ -7,13 +7,17 @@ function findOne(id) {
 }
 
 function all() {
-    return global.users;
+    return new Promise((resolve, reject) => {
+        resolve(global.users);
+    });
 }
 
 function store(user) {
-    user.id = v4(); //v4 versão da uuid
-    global.users.push(user);
-    return user;
+    return new Promise((resolve, reject) => {
+        user.id = v4(); //v4 versão da uuid
+        global.users.push(user);
+        resolve(user);
+    });
 }
 
 function update(id, user) {
@@ -23,6 +27,7 @@ function update(id, user) {
             array[index] = user;
         }
     });
+
 }
 
 function remove(id) {
