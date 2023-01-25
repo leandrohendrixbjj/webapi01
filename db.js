@@ -3,7 +3,10 @@ const { v4 } = require('uuid');
 global.users = [];
 
 function findOne(id) {
-    return global.users.find(item => item.id == id);
+    return new Promise((resolve, reject) => {
+        let user = global.users.find(item => item.id == id);
+        resolve(user)
+    });
 }
 
 function all() {
@@ -20,21 +23,28 @@ function store(user) {
     });
 }
 
-function update(id, user) {
-    return global.users.forEach((item, index, array) => {
-        if (item.id === id) {
-            user.id = id;
-            array[index] = user;
-        }
+async function update(id, user) {
+    return new Promise((resolve, reject) => {
+        global.users.forEach((item, index, array) => {
+            if (item.id === id) {
+                user.id = id;
+                array[index] = user;
+            }
+        });
+        let data = findOne(id)
+        resolve(data)
     });
 
 }
 
 function remove(id) {
-    return global.users.forEach((item, index, array) => {
-        if (item.id == id)
-            array.splice(index, 1)
-    })
+    return new Promise((resolve, reject) => {
+        global.users.forEach((item, index, array) => {
+            if (item.id == id)
+                array.splice(index, 1)
+        });
+        resolve(true)
+    });
 }
 
 module.exports = {

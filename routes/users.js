@@ -20,10 +20,33 @@ router.post('/', async (req, res, next) => {
 });
 
 router.put('/:id', async (req, res, next) => {
-  const { id } = req.params;
-  let user = db.update(id, req.body)
-  res.status(201).json({ user });
+  try {
+    const { id } = req.params;
 
+    const dataExists = await db.findOne(id);
+    if (!dataExists)
+      throw new Error("User is not avail")
+
+    let user = await db.update(id, req.body)
+    res.status(201).json({ user });
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+
+});
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const dataExists = await db.findOne(id);
+    if (!dataExists)
+      throw new Error("User is not avail")
+
+    await db.remove(id);
+    res.status(200).end();
+  } catch (error) {
+    res.status(400).json({ error })
+  };
 });
 
 module.exports = router;
