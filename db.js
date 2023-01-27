@@ -1,6 +1,5 @@
 const { v4 } = require('uuid');
 const fs = require('fs');
-const { log } = require('console');
 const FILE_PATH = require('path').join(__dirname, "users.json");
 
 function all() {
@@ -36,14 +35,15 @@ function store(user) {
 
 async function update(id, user) {
     return new Promise((resolve, reject) => {
-        let users = FILE;
+        let users = require('./users.json');
         users.forEach((item, index, arr) => {
-            if (item.id == id)
+            if (item.id == id) {
                 user.id = id
-            arr[index] = user;
+                arr[index] = user;
+            }
         })
         fs.writeFileSync(FILE_PATH, JSON.stringify(users));
-        resolve(users)
+        resolve(user)
     });
 }
 
