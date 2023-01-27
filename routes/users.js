@@ -10,6 +10,15 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    res.status(200).json(await db.findOne(id));
+  } catch (error) {
+    res.status(400).json({ error })
+  }
+});
+
 router.post('/', async (req, res, next) => {
   try {
     const user = await db.store(req.body)
