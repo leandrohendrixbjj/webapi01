@@ -49,11 +49,16 @@ async function update(id, user) {
 
 function remove(id) {
     return new Promise((resolve, reject) => {
-        global.users.forEach((item, index, array) => {
+        let users = require('./users.json');
+        users.forEach((item, index, array) => {
             if (item.id == id)
                 array.splice(index, 1)
         });
-        resolve(true)
+        if (findOne(id)) {
+            fs.writeFileSync(FILE_PATH, JSON.stringify(users));
+            resolve(true)
+        }
+        reject("Usuário não possui cadastro")
     });
 }
 
