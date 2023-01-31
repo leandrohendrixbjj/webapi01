@@ -36,6 +36,22 @@ router.put('/:id', async (req, res, next) => {
     if (!dataExists)
       throw new Error("User is not avail")
 
+    let user = await db.update(id, req.body, true)
+    res.status(201).json({ user });
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+});
+
+router.patch('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const dataExists = await db.findOne(id);
+
+    if (!dataExists)
+      throw new Error("User is not avail")
+
     let user = await db.update(id, req.body)
     res.status(201).json({ user });
   } catch (error) {

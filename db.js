@@ -4,12 +4,17 @@ const FILE_PATH = require('path').join(__dirname, "users.json");
 
 function all() {
     return new Promise((resolve, reject) => {
-        let data = require('./users.json');
 
-        if (Object.keys(data).length)
-            resolve(require('./users.json'));
+        if (!fs.existsSync(FILE_PATH))
+            resolve([])
 
-        reject("Arquivo vazio")
+        let rawData = fs.readFileSync(FILE_PATH)
+        let users = JSON.parse(rawData)
+
+        if (!Object.keys(users))
+            resolve([])
+
+        resolve(users)
     });
 }
 
@@ -33,17 +38,22 @@ function store(user) {
     });
 }
 
-async function update(id, user) {
+async function update(id, user, overwrite = false) {
+    const users = await all();
     return new Promise((resolve, reject) => {
-        let users = require('./users.json');
-        users.forEach((item, index, arr) => {
-            if (item.id == id) {
-                user.id = id
-                arr[index] = user;
+        const index = users.findIndex(user => user.id == id);
+        if (index === -1) resolve({})
+
+        if (overwrite) {
+            users[index] = user;
+        } else {
+            // Patch
+            for (let row in users) {
+                users[index][row] = user[row]
             }
-        })
+        }
         fs.writeFileSync(FILE_PATH, JSON.stringify(users));
-        resolve(user)
+        resolve(users)
     });
 }
 
