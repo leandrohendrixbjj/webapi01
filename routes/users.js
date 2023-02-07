@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db.js');
+const db = require('../model/db.js');
+const userSchema = require('../model/userSchema.js');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -21,6 +22,11 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+
+    const { error } = userSchema.validate(req.body)
+    if (error)
+      res.status(422).json({ error })
+
     const user = await db.store(req.body)
     res.status(201).json({ user });
   } catch (error) {
