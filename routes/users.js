@@ -20,13 +20,8 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validationMiddleware, async (req, res, next) => {
   try {
-
-    const { error } = userSchema.validate(req.body)
-    if (error)
-      res.status(422).json({ error })
-
     const user = await db.store(req.body)
     res.status(201).json({ user });
   } catch (error) {
@@ -34,7 +29,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', validationMiddleware, async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -75,5 +70,13 @@ router.delete('/:id', async (req, res, next) => {
     res.status(400).json({ error })
   };
 });
+
+function validationMiddleware(req, res, next) {
+  const { error } = userSchema.validate(req.body)
+
+  if (error)
+    res.status(422).json({ error })
+  next();
+}
 
 module.exports = router;
