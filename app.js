@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
+const authentication = require('./middleware/authentication.js');
 
 // Path to Routes
 var indexRouter = require('./routes/index');
@@ -26,7 +27,7 @@ app.use(
 
 // Routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/users', authentication, usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

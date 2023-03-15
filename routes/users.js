@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../model/db.js');
-const userSchema = require('../model/userSchema.js');
+const db = require('../model/userModel');
+const validate = require('../middleware/validate.js')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', validationMiddleware, async (req, res, next) => {
+router.post('/', validate, async (req, res, next) => {
   try {
     const user = await db.store(req.body)
     res.status(201).json({ user });
@@ -34,7 +34,7 @@ router.post('/', validationMiddleware, async (req, res, next) => {
   }
 });
 
-router.put('/:id', validationMiddleware, async (req, res, next) => {
+router.put('/:id', validate, async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -75,13 +75,5 @@ router.delete('/:id', async (req, res, next) => {
     res.status(400).json({ error })
   };
 });
-
-function validationMiddleware(req, res, next) {
-  const { error } = userSchema.validate(req.body)
-
-  if (error)
-    res.status(422).json({ error })
-  next();
-}
 
 module.exports = router;
