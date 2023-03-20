@@ -1,18 +1,6 @@
 const { v4 } = require('uuid');
 const fs = require('fs');
-const { json } = require('body-parser');
-const { resolve } = require('path');
 const FILE_PATH = require('path').join(__dirname, "keys.json");
-
-function findOne(key) {
-    return new Promise((resolve, reject) => {
-        let keys = require('./keys.json').find(item => item.id == key);
-        if (Object.keys(keys).length)
-            resolve(keys)
-
-        reject(`Não achou a key ${key}`)
-    });
-}
 
 function create(key) {
     return new Promise((resolve) => {
@@ -28,11 +16,57 @@ function create(key) {
     });
 }
 
+function all() {
+    return new Promise((resolve, reject) => {
+
+        if (!fs.existsSync(FILE_PATH))
+            resolve([])
+
+        let rawData = fs.readFileSync(FILE_PATH)
+        let keys = JSON.parse(rawData)
+
+        if (!Object.keys(keys))
+            resolve([])
+
+        resolve(keys)
+    })
+}
+
+function findOne(key) {
+    return new Promise((resolve, reject) => {
+        let keys = require('./keys.json').find(item => item.key == key);
+
+        if (Object.keys(keys).length)
+            resolve(keys)
+
+        reject(`Não achou a key ${key}`)
+    });
+}
+
+async function update(key, data) {
+    const keys = await all();
+    return new Promise((resolve, reject) => {
+        const index = keys.findIndex(item => item.key == key);
+        if (index === -1) reject(`Não achou a key ${key}`)
+
+        keys.map((element, index, arr) => {
+            if (element.key == key) {
+                element.enabled = data.enabled
+                element.lastUsed = data.lastUsed
+            }
+        })
+
+        fs.writeFileSync(FILE_PATH, JSON.stringify(keys));
+        resolve(keys)
+    });
+}
+
 function remove(key) {
     return new Promise((resolve, reject) => {
         let keys = require('./keys.json');
+
         keys.forEach((item, index, array) => {
-            if (item.id == id)
+            if (item.key == key)
                 array.splice(index, 1)
         });
         if (findOne(key)) {
@@ -44,7 +78,9 @@ function remove(key) {
 }
 
 module.exports = {
-    findOne,
     create,
-    remove
+    all,
+    findOne,
+    update,
+    remove,
 }

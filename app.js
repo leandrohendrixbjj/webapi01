@@ -9,6 +9,7 @@ const authentication = require('./middleware/authentication.js');
 // Path to Routes
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var keysRouter = require('./routes/keys')
 
 var app = express();
 
@@ -27,7 +28,8 @@ app.use(
 
 // Routes
 app.use('/', indexRouter);
-app.use('/users', authentication, usersRouter);
+app.use('/users', usersRouter);
+app.use('/keys', keysRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
