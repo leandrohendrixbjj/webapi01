@@ -1,5 +1,6 @@
 const { v4 } = require('uuid');
 const fs = require('fs');
+const { log } = require('console');
 const FILE_PATH = require('path').join(__dirname, "keys.json");
 
 function create(key) {
@@ -36,10 +37,10 @@ function findOne(key) {
     return new Promise((resolve, reject) => {
         let keys = require('./keys.json').find(item => item.key == key);
 
-        if (Object.keys(keys).length)
-            resolve(keys)
+        if (!keys)
+            resolve(false)
 
-        reject(`Não achou a key ${key}`)
+        resolve(keys)
     });
 }
 

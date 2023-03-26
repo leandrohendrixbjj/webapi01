@@ -28,7 +28,7 @@ app.use(
 
 // Routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/users', authentication, usersRouter);
 app.use('/keys', keysRouter);
 
 // catch 404 and forward to error handler
