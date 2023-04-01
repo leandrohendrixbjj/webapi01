@@ -1,11 +1,10 @@
 const { v4 } = require('uuid');
 const fs = require('fs');
-const { log } = require('console');
-const FILE_PATH = require('path').join(__dirname, "keys.json");
+const FILE_PATH = require('path').join(__dirname, "../data/keys.json");
 
 function create(key) {
     return new Promise((resolve) => {
-        let keys = require('./keys.json');
+        let keys = require('../data/keys.json');
         const apikey = {
             key: v4(),
             enabled: true,
@@ -35,7 +34,7 @@ function all() {
 
 function findOne(key) {
     return new Promise((resolve, reject) => {
-        let keys = require('./keys.json').find(item => item.key == key);
+        let keys = require('../data/keys.json').find(item => item.key == key);
 
         if (!keys)
             resolve(false)
@@ -64,7 +63,7 @@ async function update(key, data) {
 
 function remove(key) {
     return new Promise((resolve, reject) => {
-        let keys = require('./keys.json');
+        let keys = require('../data/keys.json');
 
         keys.forEach((item, index, array) => {
             if (item.key == key)

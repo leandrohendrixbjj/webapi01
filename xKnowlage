@@ -8,3 +8,7 @@ npm i uuid => Gera os universal ids
 
 node => Se digitado no terminal, vc pode invocar arquivos do projeto
 e executa-los
+
+"start": "npx nodemon ./bin/www" => 
+O NPX busca a biblioteca na Registry do NPM, instala em uma pasta temporária, 
+executa o comando e depois remove a biblioteca da máquina, ela não fica na node_modules global.

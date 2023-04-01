@@ -1,6 +1,6 @@
 const { v4 } = require('uuid');
 const fs = require('fs');
-const FILE_PATH = require('path').join(__dirname, "users.json");
+const FILE_PATH = require('path').join(__dirname, "../data/users.json");
 
 function all() {
     return new Promise((resolve, reject) => {
@@ -20,7 +20,7 @@ function all() {
 
 function findOne(id) {
     return new Promise((resolve, reject) => {
-        let users = require('./users.json').find(item => item.id == id);
+        let users = require('../data/users.json').find(item => item.id == id);
         if (Object.keys(users).length)
             resolve(users)
 
@@ -30,7 +30,7 @@ function findOne(id) {
 
 function store(user) {
     return new Promise((resolve, reject) => {
-        let users = require('./users.json');
+        let users = require('../data/users.json');
         user.id = v4(); //v4 versão da uuid
         users.push(user);
         fs.writeFileSync(FILE_PATH, JSON.stringify(users));
@@ -59,7 +59,7 @@ async function update(id, user, overwrite = false) {
 
 function remove(id) {
     return new Promise((resolve, reject) => {
-        let users = require('./users.json');
+        let users = require('../data/users.json');
         users.forEach((item, index, array) => {
             if (item.id == id)
                 array.splice(index, 1)
