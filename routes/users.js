@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../model/userModel');
+const userController = require('../controllers/UserController.js')
 const validate = require('../middleware/validate.js')
 
 router.get('/', async (req, res, next) => {
   try {
-    res.json(await db.all())
+    res.status(200).json(await userController.getUsers())
   } catch (error) {
     res.status(400).json({ error })
   }

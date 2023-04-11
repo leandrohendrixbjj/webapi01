@@ -7,7 +7,6 @@ const authentication = require('./middleware/authentication.js');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const keysRouter = require('./routes/keys');
-const { log } = require('console');
 
 var app = express();
 
