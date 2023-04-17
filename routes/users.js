@@ -14,12 +14,13 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
+    const user = await userController.findOne(id);
 
-    const dataExists = await db.findOne(id);
-    if (!dataExists)
+    if (!user) {
       res.status(404).json({ error: "user is not avail" });
+    }
+    res.status(200).json(user)
 
-    res.status(200).json(await db.findOne(id));
   } catch (error) {
     res.status(400).json({ error })
   }
@@ -27,8 +28,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', validate, async (req, res, next) => {
   try {
-    const user = await db.store(req.body)
-    res.status(201).json({ user });
+    res.status(201).json(await userController.store(req.body));
   } catch (error) {
     res.status(400).json({ error })
   }
@@ -38,38 +38,25 @@ router.put('/:id', validate, async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const dataExists = await db.findOne(id);
-    if (!dataExists)
+    if (!await userController.findOne(id)) {
       res.status(404).json({ error: "user is not avail" });
+    }
 
-    let user = await db.update(id, req.body, true)
+    let user = await userController.update(id, req.body);
     res.status(201).json({ user });
   } catch (error) {
     res.status(400).json({ error: error });
   }
-});
-
-router.patch('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    const dataExists = await db.findOne(id);
-
-    if (!dataExists)
-      throw new Error("User is not avail")
-
-    let user = await db.update(id, req.body)
-    res.status(201).json({ user });
-  } catch (error) {
-    res.status(400).json({ error: error });
-  }
-
 });
 
 router.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
-    await db.remove(id);
+
+    if (!await userController.findOne(id)) {
+      res.status(404).json({ error: "user is not avail" });
+    }
+    await userController.remove(id);
     res.status(200).end();
   } catch (error) {
     res.status(400).json({ error })

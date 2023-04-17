@@ -1,5 +1,6 @@
 const { v4 } = require('uuid');
 const fs = require('fs');
+const { log } = require('console');
 const FILE_PATH = require('path').join(__dirname, "../data/users.json");
 
 function all() {
@@ -21,10 +22,11 @@ function all() {
 function findOne(id) {
     return new Promise((resolve, reject) => {
         let users = require('../data/users.json').find(item => item.id == id);
-        if (Object.keys(users).length)
-            resolve(users)
 
-        reject("Não achou o registro")
+        users == undefined ? resolve(false)
+            : resolve(users)
+
+        reject("Error")
     });
 }
 
@@ -32,7 +34,7 @@ function store(user) {
     return new Promise((resolve, reject) => {
         let users = require('../data/users.json');
         user.id = v4(); //v4 versão da uuid
-        users.push(user);
+        users.push(user)
         fs.writeFileSync(FILE_PATH, JSON.stringify(users));
         resolve(user);
     });
@@ -47,13 +49,13 @@ async function update(id, user, overwrite = false) {
         if (overwrite) {
             users[index] = user;
         } else {
-            // Patch
-            for (let row in users) {
-                users[index][row] = user[row]
-            }
+            users.map((element) => {
+                if (element.id == id)
+                    Object.assign(element, user)
+            })
         }
         fs.writeFileSync(FILE_PATH, JSON.stringify(users));
-        resolve(users)
+        resolve(user)
     });
 }
 
