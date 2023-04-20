@@ -8,7 +8,12 @@ async function create() {
     return keyModel.create();
 }
 
+async function findOne(key) {
+    return keyModel.findOne(key)
+}
+
 module.exports = {
     all,
-    create
+    create,
+    findOne
 }

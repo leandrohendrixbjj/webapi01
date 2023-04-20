@@ -23,12 +23,12 @@ router.post('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
-    const dataExists = await db.findOne(id);
+    const dataExists = await keyController.findOne(id);
 
-    if (!dataExists)
-      res.status(404).json({ error: "key is not avail" });
+    if (dataExists)
+      res.status(200).json(dataExists);
 
-    res.status(200).json(await db.findOne(id));
+    res.status(404).json({ error: "key is not avail" });
   } catch (error) {
     res.status(400).json({ error })
   }
