@@ -38,12 +38,12 @@ router.put('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const dataExists = await db.findOne(id);
+    const dataExists = await keyController.findOne(id);
 
     if (!dataExists)
       res.status(404).json({ error: "key is not avail" });
 
-    let key = await db.update(id, req.body)
+    let key = await keyController.update(id, req.body);
     res.status(201).json({ key });
   } catch (error) {
     res.status(400).json({ error: error });
