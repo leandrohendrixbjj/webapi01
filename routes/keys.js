@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-//const db = require('../model/keyModel');
+const db = require('../model/keyModel');
 const keyController = require('../controllers/keyController.js')
 
 router.get('/', async (req, res, next) => {
@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const key = await db.create()
+    const key = await keyController.create()
     res.status(201).json({ key });
   } catch (error) {
     res.status(400).json({ error })

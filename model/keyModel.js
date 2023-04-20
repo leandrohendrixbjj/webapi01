@@ -2,7 +2,7 @@ const { v4 } = require('uuid');
 const fs = require('fs');
 const FILE_PATH = require('path').join(__dirname, "../data/keys.json");
 
-function create(key) {
+function create() {
     return new Promise((resolve) => {
         let keys = require('../data/keys.json');
         const apikey = {
